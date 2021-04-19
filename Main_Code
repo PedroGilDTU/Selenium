@@ -1,0 +1,36 @@
+from ase import Atoms 
+from ase.build import bulk 
+from ase.spacegroup import crystal
+from ase.visualize import view
+
+
+#Se_atom = Atoms('Se')
+# atomic position parameter x_1 = 0.2254
+#alpha = 90
+#beta = 90
+#gamma = 120
+#a  = 4.3662  #this is same as b 
+#c = 4.954 #these two worked ok
+
+a= 4.519 # from materials project
+c = 5.050
+#hexagonalSe = crystal(('Se','Se'),[(0.5,0.866,0.3),(0.5,0.866,0.6)], spacegroup = 152, cellpar = [a,a,c,90,90,120])
+hexagonalSe = crystal(('Se','Se'),[(0.7808,0.7808,0.0),(0.2192,0.0,0.3)], spacegroup = 152, cellpar = [a,a,c,90,90,120])
+#works mostly ok except for yz plane
+view(hexagonalSe)
+#Se.set_positions([(4.311,0.0,0.0) , (-2.155, 3.733, 0.0), (0.0, 0.0, 5.071)])
+
+##########################################################################################################################################
+from ase import Atoms 
+from ase.build import bulk 
+from ase.spacegroup import crystal
+from ase.visualize import view
+
+#THIS ONE AGREES WITH KARSTEN'S DATABASE
+
+
+a= 4.519 # from materials project
+c = 5.050
+#hexagonalSe = crystal(('Se','Se'),[(0.5,0.866,0.3),(0.5,0.866,0.6)], spacegroup = 152, cellpar = [a,a,c,90,90,120])
+hexagonalSe = crystal(['Se','Se','Se'],[(0.,0.2192,0.6),(0.2192,0.,0.3),(0.7808,0.7808,0)], spacegroup = 152, cellpar = [a,a,c,90,90,120])
+view(hexagonalSe)
