@@ -70,6 +70,7 @@ print(f'Relaxed lattice parameter: a = {b} Ang')
 
 ###################################################################################################################################
 #################################### CREATING BULK STRUCTURES
+from ase.build import cut
 
 #repeats the unit cell
 bulktrigse = TrigSe.repeat((2,2,2)) #too big for 4,3,3 
