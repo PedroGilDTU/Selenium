@@ -45,8 +45,9 @@ view(hexagonalSe)
 
 ## PROJECT WITH KARSTEN'S FILE
 from ase.io import read
-from ase.calculators.emt import EMT
 from gpaw import GPAW, PW
+from ase.optimize.bfgs import BFGS
+from ase.constraints import UnitCellFilter
 from ase import Atoms 
 from ase.build import bulk 
 from ase.spacegroup import crystal
