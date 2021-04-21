@@ -68,3 +68,16 @@ relax.run(fmax=0.05)
 b = np.linalg.norm(TrigSe.cell[0]) * 2**0.5
 print(f'Relaxed lattice parameter: a = {b} Ang')
 
+###################################################################################################################################
+#################################### CREATING BULK STRUCTURES
+
+#repeats the unit cell
+bulktrigse = TrigSe.repeat((2,2,2)) #too big for 4,3,3 
+view(bulktrigse)
+
+#creates a slab
+trigse111 = cut(TrigSe, (1,0,0), (0,1,0), nlayers=10)
+view(trigse111)
+
+
+
