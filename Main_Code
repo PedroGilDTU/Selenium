@@ -43,8 +43,13 @@ view(hexagonalSe)
 ################################ Pedro's CREATION AND UNIT CELL OPTIMIZATION WITH KARSTEN'S FILE 20/04/2021 ##############################
 ##########################################################################################################################################
 
-## PROJECT WITH KARSTEN'S FILE
+################################################################################################################################
+############################################################# PBE ##############################################################
+################################################################################################################################
+## PROJECT WITH KARSTEN'S FILE 
+import numpy as np
 from ase.io import read
+from ase.calculators.emt import EMT
 from gpaw import GPAW, PW
 from ase.optimize.bfgs import BFGS
 from ase.constraints import UnitCellFilter
@@ -54,19 +59,65 @@ from ase.spacegroup import crystal
 from ase.visualize import view
 
 
-
+## PBE Optimization 
 TrigSe = read('oqmd123-2736.json') #Import the data (unit cell)
-TrigSe.calc = GPAW(mode=PW(350), basis='dzp', kpts=(4, 4, 4), xc='PBE', txt='test1.txt')  #Cutoff at 350eV. Why pick the double zeta polarized basis? 
-#e_TrigSe = TrigSe.get_potential_energy()
- 
+TrigSe.calc = GPAW(mode=PW(340), kpts=(2, 2, 2), xc='PBE', txt='test1.txt')  #Cutoff at 25Ry.
+
+a = np.linalg.norm(TrigSe.cell[0]) * 2**0.5
+E_TrigSeI1 = TrigSe.get_potential_energy()
+print(f'Relaxed lattice parameter: a = {a} Ang')
+print(f'Final Total Energy: E = {E_TrigSeI1} eV')
+
 ##Optimization
 uf = UnitCellFilter(TrigSe)
 relax = BFGS(uf)
-relax.run(fmax=0.05)  
+relax.run(fmax=0.05) #Makes sure all atomic forces are below 0.05eV Angstrom 
 
-
+E_TrigSeF1 = TrigSe.get_potential_energy()
 b = np.linalg.norm(TrigSe.cell[0]) * 2**0.5
 print(f'Relaxed lattice parameter: a = {b} Ang')
+print(f'Final Total Energy: E = {E_TrigSeF1} eV')
+
+################################################################################################################################
+############################################################# PBE+D3 ###########################################################
+################################################################################################################################
+##PROJECT WITH KARSTEN'S FILE 
+import numpy as np
+from ase.io import read
+from ase.calculators.emt import EMT
+from gpaw import GPAW, PW
+from ase.optimize.bfgs import BFGS
+from ase.constraints import UnitCellFilter
+from ase import Atoms 
+from ase.build import bulk 
+from ase.spacegroup import crystal
+from ase.visualize import view
+from ase.calculators.dftd3 import DFTD3
+
+
+## PBE+D3 Optimization 
+TrigSe = read('oqmd123-2736.json') #Import the data (unit cell)
+dft = GPAW(mode=PW(340), kpts=(2, 2, 2), xc='PBE', txt='test1.txt')  #Cutoff at 25Ry.
+d3 = DFTD3(dft=dft)
+TrigSe.calc = d3
+E_TrigSeI = TrigSe.get_potential_energy()
+a = np.linalg.norm(TrigSe.cell[0]) * 2**0.5
+print(f'Initial lattice parameter: a = {a} Ang')
+print(f'Initial Total Energy: E = {E_TrigSeI} eV')
+
+##Optimization
+uf = UnitCellFilter(TrigSe)
+relax = BFGS(uf) 
+relax.run(fmax=0.05) #Makes sure all atomic forces are below 0.05eV Angstrom 
+
+E_TrigSeF = TrigSe.get_potential_energy()
+b = np.linalg.norm(TrigSe.cell[0]) * 2**0.5
+print(f'Relaxed lattice parameter: a = {b} Ang')
+print(f'Final Total Energy: E = {E_TrigSeF} eV') 
+
+
+
+
 
 ###################################################################################################################################
 #################################### CREATING BULK STRUCTURES
